@@ -29,7 +29,7 @@ public class DataAccessTeacher {
         List<Teacher> list = new ArrayList<>();
 
         while (rsTeacher.next()) {
-            int i = rsTeacher.getInt("teacherId");
+            int i = rsTeacher.getInt("id");
             String name = rsTeacher.getString("name");
             String surname = rsTeacher.getString("surname");
             String email = rsTeacher.getString("email");
