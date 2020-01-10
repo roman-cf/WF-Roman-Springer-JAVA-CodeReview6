@@ -23,16 +23,16 @@ public class DataAccessTeacher {
         System.out.println("cloesed Database");
     }
     public List<Teacher> getAllRows()  throws SQLException {
-        String sql = "SELECT * FROM " + teacherTable + " ORDER BY teacherName";
+        String sql = "SELECT * FROM " + teacherTable + " ORDER BY surname";
         PreparedStatement pstmnt = connectionT.prepareStatement(sql);
-        ResultSet rs = pstmnt.executeQuery();
+        ResultSet rsTeacher = pstmnt.executeQuery();
         List<Teacher> list = new ArrayList<>();
 
-        while (rs.next()) {
-            int i = rs.getInt("teacherId");
-            String name = rs.getString("teacherName");
-            String surname = rs.getString("teacherSurname");
-            String email = rs.getString("teacherEmail");
+        while (rsTeacher.next()) {
+            int i = rsTeacher.getInt("teacherId");
+            String name = rsTeacher.getString("name");
+            String surname = rsTeacher.getString("surname");
+            String email = rsTeacher.getString("email");
             list.add(new Teacher(i, name, surname, email));
         }
 
