@@ -17,13 +17,17 @@ import java.util.List;
 
 public class Main extends Application {
     private DataAccessTeacher dbaccessTeacher;
+    private DataAccessKlassen dbaccessKlassen;
     private ObservableList<Teacher> teachers;
-    private ListView<Teacher> listView;
+    private ListView<Teacher> listViewTeacher;
+    private ObservableList<Klassen> klassens;
+    private ListView<Klassen> listViewKlassen;
 
     @Override
     public  void init() {
         try  {
             dbaccessTeacher = new  DataAccessTeacher();
+            dbaccessKlassen = new DataAccessKlassen();
         }
         catch (Exception e) {
             displayException(e);
@@ -47,6 +51,8 @@ public class Main extends Application {
             lblHeadTeacher.setStyle("-fx-font-weight:bold");
         Label lblHeadDetails = new Label("Details to this Teacher:");
             lblHeadDetails.setStyle("-fx-font-weight:bold");
+        Label lblHeadClasses = new Label("teaches this classes:");
+            lblHeadClasses.setStyle("-fx-font-weight:bold");
         Label lblTeacherID = new Label("ID:");
             lblTeacherID.setMinWidth(55);
             lblTeacherID.setAlignment(Pos.BASELINE_RIGHT);
@@ -61,25 +67,29 @@ public class Main extends Application {
             lblTeacherEmail.setMinWidth(55);
         TextField txtEmail = new TextField();
 
-        listView = new ListView<>();
+        listViewTeacher = new ListView<>();
         teachers = getDbData();
-        listView.setItems(teachers);
+        listViewTeacher.setItems(teachers);
+
+        listViewKlassen = new ListView<>();
+        klassens = getKlassenData();
+        listViewKlassen.setItems(klassens);
 // Actions -----------------------------------------------------------------------------------------------
-        listView.getSelectionModel().selectedItemProperty().addListener(((observableValue, teacher, t1) -> {
-            int selIdx = listView.getSelectionModel().getSelectedIndex();
+        listViewTeacher.getSelectionModel().selectedItemProperty().addListener(((observableValue, teacher, t1) -> {
+            int selIdx = listViewTeacher.getSelectionModel().getSelectedIndex();
             if(selIdx!=-1){
                 txtID.setText(Integer.toString(t1.getId()));
                 txtName.setText(t1.getName());
                 txtSurname.setText(t1.getSurename());
                 txtEmail.setText(t1.getEmail());
-
+                getKlassenData();
             }
-
         }));
+
 
 // Scene Zusammenbauen ---------------------------------------------------------------------------
 
-        VBox vBoxLeft = new VBox(lblHeadTeacher,listView);
+        VBox vBoxLeft = new VBox(lblHeadTeacher,listViewTeacher);
         vBoxLeft.setPadding(new Insets(10,10,10,10));
         HBox hBoxLblId = new HBox(lblTeacherID,txtID);
         HBox hBoxLblName = new HBox(lblTeacherName,txtName);
@@ -87,8 +97,10 @@ public class Main extends Application {
         HBox hBoxLblEmail = new HBox(lblTeacherEmail,txtEmail);
         VBox vBoxmiddle = new VBox(lblHeadDetails,hBoxLblId,hBoxLblName,hBoxLblSurname,hBoxLblEmail);
         vBoxmiddle.setPadding(new Insets(10,10,10,10));
+        VBox vBoxRight = new VBox(lblHeadClasses, listViewKlassen);
+        vBoxRight.setPadding(new Insets(10,10,10,10));
 
-        HBox mainBox = new HBox(vBoxLeft,vBoxmiddle);
+        HBox mainBox = new HBox(vBoxLeft,vBoxmiddle,vBoxRight);
         Scene sceneTeacher = new Scene(mainBox);
         primaryStage.setScene(sceneTeacher);
         primaryStage.show();
@@ -111,6 +123,18 @@ public class Main extends Application {
         }
         ObservableList<Teacher> dbData = FXCollections.observableList(list);
         return  dbData;
+    }
+
+    private  ObservableList<Klassen> getKlassenData() {
+        List<Klassen> listKlassen = null ;
+        try  {
+            listKlassen = dbaccessKlassen.getAllRows();
+        }
+        catch  (Exception e) {
+            displayException(e);
+        }
+        ObservableList<Klassen> dbData1 = FXCollections.observableList(listKlassen);
+        return  dbData1;
     }
 
     private   void  displayException(Exception e) {
