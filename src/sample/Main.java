@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-import static javafx.scene.paint.Color.*;
-
 public class Main extends Application {
     private DataAccessTeacher dbaccessTeacher;
     private ObservableList<Teacher> teachers;
@@ -44,8 +42,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("School Statistics");
-
-        // objekte und elemente erstellen
+// objekte und elemente erstellen--------------------------------------------------------------------------------------
         Label lblHeadTeacher = new Label("Teachers:");
             lblHeadTeacher.setStyle("-fx-font-weight:bold");
         Label lblHeadDetails = new Label("Details to this Teacher:");
@@ -65,9 +62,20 @@ public class Main extends Application {
         TextField txtEmail = new TextField();
 
         listView = new ListView<>();
-        //listView.getSelectionModel().selectedIndexProperty().addListener(new  ListSelectChangeListener());
         teachers = getDbData();
         listView.setItems(teachers);
+// Actions -----------------------------------------------------------------------------------------------
+        listView.getSelectionModel().selectedItemProperty().addListener(((observableValue, teacher, t1) -> {
+            int selIdx = listView.getSelectionModel().getSelectedIndex();
+            if(selIdx!=-1){
+                txtID.setText(Integer.toString(t1.getId()));
+                txtName.setText(t1.getName());
+                txtSurname.setText(t1.getSurename());
+                txtEmail.setText(t1.getEmail());
+
+            }
+
+        }));
 
 // Scene Zusammenbauen ---------------------------------------------------------------------------
 
@@ -82,10 +90,12 @@ public class Main extends Application {
 
         HBox mainBox = new HBox(vBoxLeft,vBoxmiddle);
         Scene sceneTeacher = new Scene(mainBox);
-        sceneTeacher.setFill(GRAY);
         primaryStage.setScene(sceneTeacher);
         primaryStage.show();
+
     }
+
+
 
     public static void main(String[] args) {
         launch(args);

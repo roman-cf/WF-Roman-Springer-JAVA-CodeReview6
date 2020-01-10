@@ -13,7 +13,7 @@ public class Teacher {
         this.email = email;
     }
 
-    @Override
+
     public String toString(){return name + " " + surename;}
 
     public int getId() {return id;}
