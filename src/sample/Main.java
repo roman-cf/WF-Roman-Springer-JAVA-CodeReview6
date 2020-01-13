@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -27,6 +28,7 @@ public class Main extends Application {
     private ListView<Student> listViewStudent;
     private int tID;
     private int cID;
+    private int from;
 
     @Override
     public  void init() {
@@ -79,6 +81,8 @@ public class Main extends Application {
             lblTeacherEmail.setMinWidth(55);
         TextField txtEmail = new TextField();
 
+        Button btnUpdate = new Button("update");
+
         listViewTeacher = new ListView<>();
         teachers = getDbData();
         listViewTeacher.setItems(teachers);
@@ -98,6 +102,8 @@ public class Main extends Application {
                 txtName.setText(t1.getName());
                 txtSurname.setText(t1.getSurename());
                 txtEmail.setText(t1.getEmail());
+                from = 0;
+                lblHeadDetails.setText("Details of this Teacher:");
 
                 tID = t1.getId();
                 dbaccessKlassen.setTeacherID(tID);
@@ -126,6 +132,8 @@ public class Main extends Application {
                 txtName.setText(s1.getName());
                 txtSurname.setText(s1.getSurename());
                 txtEmail.setText(s1.getEmail());
+                from = 1;
+                lblHeadDetails.setText("Details of this Student:");
             }
         } ));
 
@@ -139,7 +147,7 @@ public class Main extends Application {
         HBox hBoxLblName = new HBox(lblTeacherName,txtName);
         HBox hBoxLblSurname = new HBox(lblTeacherSurname,txtSurname);
         HBox hBoxLblEmail = new HBox(lblTeacherEmail,txtEmail);
-        VBox vBoxmiddle = new VBox(lblHeadDetails,hBoxLblId,hBoxLblName,hBoxLblSurname,hBoxLblEmail);
+        VBox vBoxmiddle = new VBox(lblHeadDetails,hBoxLblId,hBoxLblName,hBoxLblSurname,hBoxLblEmail,btnUpdate);
         vBoxmiddle.setPadding(new Insets(10,10,10,10));
         VBox vBoxRight = new VBox(lblHeadClasses, listViewKlassen);
         vBoxRight.setPadding(new Insets(10,10,10,10));
