@@ -22,12 +22,13 @@ public class Main extends Application {
     private ListView<Teacher> listViewTeacher;
     private ObservableList<Klassen> klassens;
     private ListView<Klassen> listViewKlassen;
+    private int tID;
 
     @Override
     public  void init() {
         try  {
             dbaccessTeacher = new  DataAccessTeacher();
-            dbaccessKlassen = new DataAccessKlassen();
+            dbaccessKlassen = new DataAccessKlassen(0);
         }
         catch (Exception e) {
             displayException(e);
@@ -37,6 +38,7 @@ public class Main extends Application {
     public  void stop() {
         try {
             dbaccessTeacher.closeDb();
+            dbaccessKlassen.closeDb();
         }
         catch (Exception e) {
             displayException(e);
@@ -82,7 +84,13 @@ public class Main extends Application {
                 txtName.setText(t1.getName());
                 txtSurname.setText(t1.getSurename());
                 txtEmail.setText(t1.getEmail());
-                getKlassenData();
+                tID = t1.getId();
+
+                dbaccessKlassen.setTeacherID(tID);
+
+                klassens = getKlassenData();
+                listViewKlassen.setItems(klassens);
+
             }
         }));
 
@@ -91,6 +99,7 @@ public class Main extends Application {
 
         VBox vBoxLeft = new VBox(lblHeadTeacher,listViewTeacher);
         vBoxLeft.setPadding(new Insets(10,10,10,10));
+        vBoxLeft.setMaxHeight(150);
         HBox hBoxLblId = new HBox(lblTeacherID,txtID);
         HBox hBoxLblName = new HBox(lblTeacherName,txtName);
         HBox hBoxLblSurname = new HBox(lblTeacherSurname,txtSurname);
@@ -128,7 +137,7 @@ public class Main extends Application {
     private  ObservableList<Klassen> getKlassenData() {
         List<Klassen> listKlassen = null ;
         try  {
-            listKlassen = dbaccessKlassen.getAllRows();
+              listKlassen = dbaccessKlassen.getAllRows();
         }
         catch  (Exception e) {
             displayException(e);

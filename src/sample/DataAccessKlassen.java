@@ -8,10 +8,11 @@ public class DataAccessKlassen {
 
     private Connection connectionK;
     private static final String klassenTable = "teaching";
-    private int teacherID = 0;
+    private int teacherID = 2;
 
 
-    public DataAccessKlassen() throws ClassNotFoundException, SQLException {
+    public DataAccessKlassen(int teacherID) throws ClassNotFoundException, SQLException {
+        this.teacherID = teacherID;
         Class.forName("com.mysql.cj.jdbc.Driver");
         connectionK = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/cr6" +
@@ -41,7 +42,8 @@ public class DataAccessKlassen {
         return listKlassen;
     }
 
-    public void setTeacherID(int teacherID) {
+    public List<Klassen> setTeacherID(int teacherID) {
         this.teacherID = teacherID;
+        return null;
     }
 }
