@@ -57,7 +57,7 @@ public class Main extends Application {
 // objekte und elemente erstellen--------------------------------------------------------------------------------------
         Label lblHeadTeacher = new Label("Teachers:");
             lblHeadTeacher.setStyle("-fx-font-weight:bold");
-        Label lblHeadDetails = new Label("Details to this Teacher:");
+        Label lblHeadDetails = new Label("Details to selected Person:");
             lblHeadDetails.setStyle("-fx-font-weight:bold");
         Label lblHeadClasses = new Label("teaches this classes:");
             lblHeadClasses.setStyle("-fx-font-weight:bold");
@@ -68,6 +68,7 @@ public class Main extends Application {
             lblTeacherID.setMinWidth(55);
             lblTeacherID.setAlignment(Pos.BASELINE_RIGHT);
         TextField txtID = new TextField();
+            txtID.setDisable(true);
         Label lblTeacherName = new Label("Name:");
             lblTeacherName.setMinWidth(55);
         TextField txtName = new TextField();
@@ -115,6 +116,16 @@ public class Main extends Application {
                 students = getStudentsData();
                 listViewStudent.setItems(students);
                 lblClassList.setText("Students of Class: "+k1.getClassname());
+            }
+        } ));
+
+        listViewStudent.getSelectionModel().selectedItemProperty().addListener(((observableValue, student, s1) ->{
+            int selIdx = listViewStudent.getSelectionModel().getSelectedIndex();
+            if(selIdx!=-1){
+                txtID.setText(Integer.toString(s1.getId()));
+                txtName.setText(s1.getName());
+                txtSurname.setText(s1.getSurename());
+                txtEmail.setText(s1.getEmail());
             }
         } ));
 
