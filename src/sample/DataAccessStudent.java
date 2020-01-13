@@ -9,7 +9,7 @@ public class DataAccessStudent {
     private Connection connectionS;
     private static final String studentTable = "student";
     private int classID = 0;
-
+    private String queryTableWhere =  " WHERE class_id="+ String.valueOf(classID);
 
     public DataAccessStudent(int classID) throws ClassNotFoundException, SQLException {
         this.classID = classID;
@@ -26,7 +26,12 @@ public class DataAccessStudent {
         System.out.println("cloesed Database");
     }
     public List<Student> getAllRows()  throws SQLException {
-        String sql = "SELECT *  FROM "+ studentTable +" WHERE class_id="+ classID;
+        if(classID==0){
+            queryTableWhere = " ";
+        }else{
+            queryTableWhere = " WHERE class_id="+ String.valueOf(classID);
+        }
+        String sql = "SELECT *  FROM "+ studentTable + queryTableWhere; //" WHERE class_id="+ classID;
         PreparedStatement pstmntS = connectionS.prepareStatement(sql);
         ResultSet rsStudent = pstmntS.executeQuery();
         List<Student> listStudent = new ArrayList<>();

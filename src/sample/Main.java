@@ -61,7 +61,7 @@ public class Main extends Application {
             lblHeadDetails.setStyle("-fx-font-weight:bold");
         Label lblHeadClasses = new Label("teaches this classes:");
             lblHeadClasses.setStyle("-fx-font-weight:bold");
-        Label lblClassList = new Label("Students of Class:");
+        Label lblClassList = new Label("Students:");
             lblClassList.setStyle("-fx-font-weight:bold");
             lblClassList.setPadding(new Insets(20,0,0,0));
         Label lblTeacherID = new Label("ID:");
