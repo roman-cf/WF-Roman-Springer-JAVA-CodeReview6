@@ -18,17 +18,22 @@ import java.util.List;
 public class Main extends Application {
     private DataAccessTeacher dbaccessTeacher;
     private DataAccessKlassen dbaccessKlassen;
+    private DataAccessStudent dbaccessStudent;
     private ObservableList<Teacher> teachers;
     private ListView<Teacher> listViewTeacher;
     private ObservableList<Klassen> klassens;
     private ListView<Klassen> listViewKlassen;
+    private ObservableList<Student> students;
+    private ListView<Student> listViewStudent;
     private int tID;
+    private int cID;
 
     @Override
     public  void init() {
         try  {
             dbaccessTeacher = new  DataAccessTeacher();
             dbaccessKlassen = new DataAccessKlassen(0);
+            dbaccessStudent = new DataAccessStudent(0);
         }
         catch (Exception e) {
             displayException(e);
@@ -39,6 +44,7 @@ public class Main extends Application {
         try {
             dbaccessTeacher.closeDb();
             dbaccessKlassen.closeDb();
+            dbaccessStudent.closeDb();
         }
         catch (Exception e) {
             displayException(e);
@@ -55,6 +61,9 @@ public class Main extends Application {
             lblHeadDetails.setStyle("-fx-font-weight:bold");
         Label lblHeadClasses = new Label("teaches this classes:");
             lblHeadClasses.setStyle("-fx-font-weight:bold");
+        Label lblClassList = new Label("Students of Class:");
+            lblClassList.setStyle("-fx-font-weight:bold");
+            lblClassList.setPadding(new Insets(20,0,0,0));
         Label lblTeacherID = new Label("ID:");
             lblTeacherID.setMinWidth(55);
             lblTeacherID.setAlignment(Pos.BASELINE_RIGHT);
@@ -76,6 +85,10 @@ public class Main extends Application {
         listViewKlassen = new ListView<>();
         klassens = getKlassenData();
         listViewKlassen.setItems(klassens);
+
+        listViewStudent = new ListView<>();
+        students = getStudentsData();
+        listViewStudent.setItems(students);
 // Actions -----------------------------------------------------------------------------------------------
         listViewTeacher.getSelectionModel().selectedItemProperty().addListener(((observableValue, teacher, t1) -> {
             int selIdx = listViewTeacher.getSelectionModel().getSelectedIndex();
@@ -84,22 +97,33 @@ public class Main extends Application {
                 txtName.setText(t1.getName());
                 txtSurname.setText(t1.getSurename());
                 txtEmail.setText(t1.getEmail());
+
                 tID = t1.getId();
-
                 dbaccessKlassen.setTeacherID(tID);
-
                 klassens = getKlassenData();
                 listViewKlassen.setItems(klassens);
 
             }
         }));
 
+        listViewKlassen.getSelectionModel().selectedItemProperty().addListener(((observableValue, klasse, k1)->{
+            int selIdx = listViewKlassen.getSelectionModel().getSelectedIndex();
+            if(selIdx!=-1){
+                cID = k1.getId();
+                dbaccessStudent.setClassID(cID);
+                System.out.println(dbaccessStudent.getClassID());
+                students = getStudentsData();
+                listViewStudent.setItems(students);
+                lblClassList.setText("Students of Class: "+k1.getClassname());
+            }
+        } ));
+
 
 // Scene Zusammenbauen ---------------------------------------------------------------------------
 
-        VBox vBoxLeft = new VBox(lblHeadTeacher,listViewTeacher);
+        VBox vBoxLeft = new VBox(lblHeadTeacher,listViewTeacher,lblClassList,listViewStudent);
         vBoxLeft.setPadding(new Insets(10,10,10,10));
-        vBoxLeft.setMaxHeight(150);
+        vBoxLeft.setMaxHeight(500);
         HBox hBoxLblId = new HBox(lblTeacherID,txtID);
         HBox hBoxLblName = new HBox(lblTeacherName,txtName);
         HBox hBoxLblSurname = new HBox(lblTeacherSurname,txtSurname);
@@ -144,6 +168,18 @@ public class Main extends Application {
         }
         ObservableList<Klassen> dbData1 = FXCollections.observableList(listKlassen);
         return  dbData1;
+    }
+
+    private  ObservableList<Student> getStudentsData(){
+        List<Student> listStudent = null;
+        try {
+            listStudent = dbaccessStudent.getAllRows();
+        }
+        catch (Exception e) {
+            displayException(e);
+        }
+        ObservableList<Student> dbData2 = FXCollections.observableList(listStudent);
+        return dbData2;
     }
 
     private   void  displayException(Exception e) {
