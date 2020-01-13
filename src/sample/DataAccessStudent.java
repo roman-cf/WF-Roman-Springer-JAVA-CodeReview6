@@ -19,7 +19,7 @@ public class DataAccessStudent {
                         "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC" ,
                 "root",
                 "");
-        System.out.println("connected to db");
+        System.out.println("connected to db table student");
     }
     public void closeDb() throws SQLException {
         connectionS.close();
