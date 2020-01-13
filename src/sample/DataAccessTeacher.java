@@ -40,5 +40,4 @@ public class DataAccessTeacher {
         return list;
     }
 
-
 }

@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class Main extends Application {
@@ -33,7 +34,7 @@ public class Main extends Application {
     @Override
     public  void init() {
         try  {
-            dbaccessTeacher = new  DataAccessTeacher();
+            dbaccessTeacher = new DataAccessTeacher();
             dbaccessKlassen = new DataAccessKlassen(0);
             dbaccessStudent = new DataAccessStudent(0);
         }
@@ -104,12 +105,10 @@ public class Main extends Application {
                 txtEmail.setText(t1.getEmail());
                 from = 0;
                 lblHeadDetails.setText("Details of this Teacher:");
-
                 tID = t1.getId();
                 dbaccessKlassen.setTeacherID(tID);
                 klassens = getKlassenData();
                 listViewKlassen.setItems(klassens);
-
             }
         }));
 
@@ -136,6 +135,20 @@ public class Main extends Application {
                 lblHeadDetails.setText("Details of this Student:");
             }
         } ));
+        btnUpdate.setOnAction(actionEvent -> {
+            String table = "";
+            if (from == 0){table = "teacher";}else{ table = "student";}
+            String updateString = "name = '"+txtName.getText()+"', surname = '"+txtSurname.getText()+"', email = '"+txtEmail.getText()+"'";
+            try {
+                DBUpdater btnUpdateObj = new DBUpdater(table,Integer.parseInt(txtID.getText()),updateString);
+                btnUpdateObj.updateRow();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
 
 
 // Scene Zusammenbauen ---------------------------------------------------------------------------
