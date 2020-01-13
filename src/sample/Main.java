@@ -142,6 +142,7 @@ public class Main extends Application {
             try {
                 DBUpdater btnUpdateObj = new DBUpdater(table,Integer.parseInt(txtID.getText()),updateString);
                 btnUpdateObj.updateRow();
+             // refresh
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -173,10 +174,10 @@ public class Main extends Application {
     }
 
 
-
     public static void main(String[] args) {
         launch(args);
     }
+
 
     private  ObservableList<Teacher> getDbData() {
         List<Teacher> list = null ;
